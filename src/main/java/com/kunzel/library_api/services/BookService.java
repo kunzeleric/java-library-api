@@ -28,7 +28,7 @@ public class BookService {
     return bookRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
   }
 
-  public Book createBook(String title, String isbn, int publishedYear, String genre, long authorId) {
+  public Book createBook(String title, String isbn, int publishedYear, String genre, Long authorId) {
     Author author = authorRepository.findById(authorId).orElseThrow(() -> new NotFoundException(authorId));
 
     Book book = new Book(title, isbn, publishedYear, genre, author);
