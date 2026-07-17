@@ -18,7 +18,7 @@ public record AuthorDetailResponse(
         author.getName(),
         author.getNationality(),
         author.getBirthDate(),
-        author.getAuthorBooks().stream()
+        author.getBooks().stream()
             .map(BookResponse::new)
             .toList());
   }

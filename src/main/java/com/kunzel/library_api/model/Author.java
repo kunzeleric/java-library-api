@@ -57,7 +57,7 @@ public class Author {
         return birthDate;
     }
 
-    public List<Book> getAuthorBooks() {
+    public List<Book> getBooks() {
         return books;
     }
 
