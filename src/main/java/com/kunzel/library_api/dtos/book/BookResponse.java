@@ -1,10 +1,10 @@
 package com.kunzel.library_api.dtos.book;
 
-import com.kunzel.library_api.model.Author;
+import com.kunzel.library_api.dtos.author.AuthorSummary;
 import com.kunzel.library_api.model.Book;
 
 public record BookResponse(Long id, String title, String isbn, int publishedYear, String genre, boolean available,
-    Author author) {
+    AuthorSummary author) {
   public BookResponse(Book book) {
     this(
         book.getId(),
@@ -13,7 +13,7 @@ public record BookResponse(Long id, String title, String isbn, int publishedYear
         book.getPublishedYear(),
         book.getGenre(),
         book.isAvailable(),
-        book.getAuthor());
+        new AuthorSummary(book.getAuthor()));
   }
 
 }
