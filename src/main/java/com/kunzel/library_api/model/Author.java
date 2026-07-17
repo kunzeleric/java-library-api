@@ -3,6 +3,8 @@ package com.kunzel.library_api.model;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,6 +29,7 @@ public class Author {
     private LocalDate birthDate;
 
     @OneToMany(mappedBy = "author")
+    @JsonManagedReference
     private List<Book> books;
 
     protected Author() {

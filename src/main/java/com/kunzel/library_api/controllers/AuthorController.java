@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kunzel.library_api.dtos.author.AuthorDetailResponse;
 import com.kunzel.library_api.dtos.author.AuthorResponse;
 import com.kunzel.library_api.dtos.author.CreateAuthorRequest;
 import com.kunzel.library_api.dtos.author.UpdateAuthorRequest;
@@ -38,9 +39,9 @@ public class AuthorController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<AuthorResponse> getAuthorById(@PathVariable("id") long id) {
+  public ResponseEntity<AuthorDetailResponse> getAuthorById(@PathVariable("id") long id) {
     Author author = authorService.getAuthorById(id);
-    return ResponseEntity.ok().body(new AuthorResponse(author));
+    return ResponseEntity.ok().body(new AuthorDetailResponse(author));
   }
 
   @PostMapping
