@@ -13,18 +13,24 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "authors")
+
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
+    @Column(nullable = false)
     private String nationality;
+    @Column(nullable = false)
     private LocalDate birthDate;
 
     @OneToMany(mappedBy = "author")
     private List<Book> books;
+
+    protected Author() {
+    }
 
     public Author(String name, String nationality, LocalDate birthDate) {
         this.name = name;
@@ -46,6 +52,10 @@ public class Author {
 
     public LocalDate getBirthDate() {
         return birthDate;
+    }
+
+    public List<Book> getAuthorBooks() {
+        return books;
     }
 
     public void setId(Long id) {
