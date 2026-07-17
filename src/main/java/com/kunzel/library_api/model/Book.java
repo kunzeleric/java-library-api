@@ -1,5 +1,7 @@
 package com.kunzel.library_api.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,23 +18,32 @@ public class Book {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false)
+  @Column(nullable = false, unique = true)
   private String title;
+  @Column(nullable = false, unique = true)
   private String isbn;
+  @Column(nullable = false)
   private int publishedYear;
+  @Column(nullable = false)
   private String genre;
+  @Column(nullable = false)
   private boolean available;
 
   @ManyToOne
   @JoinColumn(name = "author_id", nullable = false)
+  @JsonBackReference
   private Author author;
 
-  public Book(String title, String isbn, int publishedYear, String genre) {
+  protected Book() {
+  }
+
+  public Book(String title, String isbn, int publishedYear, String genre, Author author) {
     this.title = title;
     this.isbn = isbn;
     this.publishedYear = publishedYear;
     this.genre = genre;
     this.available = true;
+    this.author = author;
   }
 
   public Long getId() {
@@ -83,4 +94,11 @@ public class Book {
     this.available = available;
   }
 
+  public Author getAuthor() {
+    return author;
+  }
+
+  public void setAuthor(Author author) {
+    this.author = author;
+  }
 }
