@@ -26,7 +26,7 @@ import jakarta.validation.constraints.NotBlank;
 @RestController
 @RequestMapping("/authors")
 public class AuthorController {
-  private AuthorService authorService;
+  private final AuthorService authorService;
 
   public AuthorController(AuthorService authorService) {
     this.authorService = authorService;
@@ -59,6 +59,7 @@ public class AuthorController {
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteAuthor(@PathVariable("id") long id) {
+    authorService.deleteAuthor(id);
     return ResponseEntity.noContent().build();
   }
 
