@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.kunzel.library_api.exceptions.AuthorWithBooksException;
 import com.kunzel.library_api.exceptions.NotFoundException;
 import com.kunzel.library_api.model.Author;
 import com.kunzel.library_api.repositories.AuthorRepository;
@@ -54,6 +55,10 @@ public class AuthorService {
 
   public void deleteAuthor(Long id) {
     Author author = getAuthorById(id);
+
+    if (author.getBooks().size() > 0) {
+      throw new AuthorWithBooksException(id);
+    }
 
     authorRepository.delete(author);
   }
