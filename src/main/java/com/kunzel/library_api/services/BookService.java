@@ -33,11 +33,11 @@ public class BookService {
   }
 
   public Book getBookById(Long id) {
-    return bookRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+    return bookRepository.findById(id).orElseThrow(() -> new NotFoundException(id, "livro"));
   }
 
   public Book createBook(String title, String isbn, int publishedYear, String genre, Long authorId) {
-    Author author = authorRepository.findById(authorId).orElseThrow(() -> new NotFoundException(authorId));
+    Author author = authorRepository.findById(authorId).orElseThrow(() -> new NotFoundException(authorId, "autor"));
     Optional<Book> existingBook = bookRepository.findByIsbn(isbn);
 
     if (existingBook.isPresent()) {
@@ -70,7 +70,7 @@ public class BookService {
       book.setGenre(genre);
 
     if (authorId != null) {
-      Author author = authorRepository.findById(authorId).orElseThrow(() -> new NotFoundException(authorId));
+      Author author = authorRepository.findById(authorId).orElseThrow(() -> new NotFoundException(authorId, "autor"));
       book.setAuthor(author);
     }
 

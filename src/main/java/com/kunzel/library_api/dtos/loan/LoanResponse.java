@@ -3,15 +3,16 @@ package com.kunzel.library_api.dtos.loan;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-import com.kunzel.library_api.model.Book;
+import com.kunzel.library_api.dtos.book.BookResponse;
 import com.kunzel.library_api.model.Loan;
 
-public record LoanResponse(Long loanId, String borrowerName, LocalDate dueDate, LocalDate returnDate, Book book,
+public record LoanResponse(Long loanId, String borrowerName, LocalDate dueDate, LocalDate returnDate, BookResponse book,
     Long daysLate,
     Boolean late) {
 
   public LoanResponse(Loan loan) {
-    this(loan.getId(), loan.getBorrowerName(), loan.getDueDate(), loan.getReturnDate(), loan.getBook(),
+    this(loan.getId(), loan.getBorrowerName(), loan.getDueDate(), loan.getReturnDate(),
+        new BookResponse(loan.getBook()),
         calculateDaysLate(loan),
         isLoanLate(loan));
   }

@@ -23,7 +23,7 @@ public class LoanService {
 
   @Transactional
   public Loan createLoan(Long bookId, String borrowerName, String borrowerEmail) {
-    Book book = bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException(bookId));
+    Book book = bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException(bookId, "livro"));
     book.markAsLoaned();
     return loanRepository.save(new Loan(borrowerName, borrowerEmail, book));
   }
@@ -38,7 +38,7 @@ public class LoanService {
 
   @Transactional
   public Loan returnLoan(Long loanId) {
-    Loan foundLoan = loanRepository.findById(loanId).orElseThrow(() -> new NotFoundException(loanId));
+    Loan foundLoan = loanRepository.findById(loanId).orElseThrow(() -> new NotFoundException(loanId, "empréstimo"));
     foundLoan.markAsReturned();
     return foundLoan;
   }

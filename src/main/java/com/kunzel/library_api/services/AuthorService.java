@@ -29,7 +29,7 @@ public class AuthorService {
   }
 
   public Author getAuthorById(Long id) {
-    return authorRepository.findByIdWithBooks(id).orElseThrow(() -> new NotFoundException(id));
+    return authorRepository.findByIdWithBooks(id).orElseThrow(() -> new NotFoundException(id, "autor"));
   }
 
   public List<Author> getAuthorsByName(String name) {
