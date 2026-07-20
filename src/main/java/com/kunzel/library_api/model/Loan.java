@@ -20,22 +20,33 @@ public class Loan {
 
   @Column(nullable = false)
   private String borrowerName;
+
+  @Column(nullable = true)
   private String borrowerEmail;
+
+  @Column(nullable = false)
   private LocalDate loanDate;
+
+  @Column(nullable = false)
   private LocalDate dueDate;
+
+  @Column(nullable = true)
   private LocalDate returnDate;
 
   @ManyToOne
   @JoinColumn(name = "book", nullable = false)
   Book book;
 
-  public Loan(String borrowerName, String borrowerEmail, LocalDate dueDate, LocalDate returnDate,
+  protected Loan() {
+  }
+
+  public Loan(String borrowerName, String borrowerEmail,
       Book book) {
     this.borrowerName = borrowerName;
     this.borrowerEmail = borrowerEmail;
     this.loanDate = LocalDate.now();
-    this.dueDate = dueDate;
-    this.returnDate = returnDate;
+    this.dueDate = LocalDate.now().plusDays(14);
+    this.returnDate = null;
     this.book = book;
   }
 
