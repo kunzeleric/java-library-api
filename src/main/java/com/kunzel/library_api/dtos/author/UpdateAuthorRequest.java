@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import jakarta.validation.constraints.Past;
 
 public record UpdateAuthorRequest(
-    String name,
-    String nationality,
-    @Past LocalDate birthDate) {
+        String name,
+        String nationality,
+        @Past(message = "deve ser uma data do passado") LocalDate birthDate) {
 }
