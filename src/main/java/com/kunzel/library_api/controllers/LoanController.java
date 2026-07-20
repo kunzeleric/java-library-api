@@ -17,6 +17,8 @@ import com.kunzel.library_api.dtos.loan.LoanResponse;
 import com.kunzel.library_api.model.Loan;
 import com.kunzel.library_api.services.LoanService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/loans")
 public class LoanController {
@@ -34,7 +36,7 @@ public class LoanController {
   }
 
   @PostMapping
-  public ResponseEntity<LoanResponse> createLoan(@RequestBody CreateLoanRequest request) {
+  public ResponseEntity<LoanResponse> createLoan(@Valid @RequestBody CreateLoanRequest request) {
     Loan created = loanService.createLoan(request.bookId(), request.borrowerName(), request.borrowerEmail());
     return ResponseEntity.status(HttpStatus.CREATED).body(new LoanResponse(created));
   }

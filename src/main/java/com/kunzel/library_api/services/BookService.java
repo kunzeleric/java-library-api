@@ -51,8 +51,12 @@ public class BookService {
     if (title != null)
       book.setTitle(title);
 
-    if (isbn != null)
+    if (isbn != null) {
+      if (isIsbnDuplicated(isbn)) {
+        throw new DuplicatedIsbnException(isbn);
+      }
       book.setIsbn(isbn);
+    }
 
     if (publishedYear != null)
       book.setPublishedYear(publishedYear);
