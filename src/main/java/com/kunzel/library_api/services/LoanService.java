@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kunzel.library_api.exceptions.BookNotAvailableException;
 import com.kunzel.library_api.exceptions.NotFoundException;
@@ -11,8 +12,6 @@ import com.kunzel.library_api.model.Book;
 import com.kunzel.library_api.model.Loan;
 import com.kunzel.library_api.repositories.BookRepository;
 import com.kunzel.library_api.repositories.LoanRepository;
-
-import jakarta.transaction.Transactional;
 
 @Service
 public class LoanService {
@@ -27,17 +26,8 @@ public class LoanService {
   @Transactional
   public Loan createLoan(Long bookId, String borrowerName, String borrowerEmail) {
     Book book = bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException(bookId));
-
-    if (!book.isAvailable()) {
-      throw new BookNotAvailableException(bookId);
-    }
-
-    Loan created = new Loan(borrowerName, borrowerEmail, book);
-
-    book.setAvailable(false);
-    bookRepository.save(book);
-
-    return loanRepository.save(created);
+    book.markAsLoaned();
+    return loanRepository.save(new Loan(borrowerName, borrowerEmail, book));
   }
 
   public List<Loan> getAllLoans() {
@@ -47,16 +37,7 @@ public class LoanService {
   @Transactional
   public Loan returnLoan(Long loanId) {
     Loan foundLoan = loanRepository.findById(loanId).orElseThrow(() -> new NotFoundException(loanId));
-    Book loanBook = bookRepository.findById(foundLoan.getBook().getId())
-        .orElseThrow(() -> new NotFoundException(foundLoan.getBook().getId()));
-
-    LocalDate returnDate = LocalDate.now();
-
-    foundLoan.setReturnDate(returnDate);
-
-    loanBook.setAvailable(true);
-    bookRepository.save(loanBook);
-
-    return loanRepository.save(foundLoan);
+    foundLoan.markAsReturned();
+    return foundLoan;
   }
 }

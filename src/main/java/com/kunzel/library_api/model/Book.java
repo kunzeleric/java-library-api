@@ -1,6 +1,7 @@
 package com.kunzel.library_api.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.kunzel.library_api.exceptions.BookNotAvailableException;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -90,15 +91,23 @@ public class Book {
     return available;
   }
 
-  public void setAvailable(boolean available) {
-    this.available = available;
-  }
-
   public Author getAuthor() {
     return author;
   }
 
   public void setAuthor(Author author) {
     this.author = author;
+  }
+
+  public void markAsLoaned() {
+    if (!this.isAvailable()) {
+      throw new BookNotAvailableException(this.id);
+    }
+
+    this.available = false;
+  }
+
+  public void markAsReturned() {
+    this.available = true;
   }
 }

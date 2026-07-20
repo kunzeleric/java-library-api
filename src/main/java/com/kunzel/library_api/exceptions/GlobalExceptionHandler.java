@@ -27,4 +27,9 @@ public class GlobalExceptionHandler {
   public ResponseEntity<String> handleDuplicatedIsbn(DuplicatedIsbnException ex) {
     return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
   }
+
+  @ExceptionHandler(LoanAlreadyReturnedException.class)
+  public ResponseEntity<String> handleLoanAlreadyReturned(LoanAlreadyReturnedException ex) {
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+  }
 }

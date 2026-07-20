@@ -2,6 +2,9 @@ package com.kunzel.library_api.model;
 
 import java.time.LocalDate;
 
+import com.kunzel.library_api.exceptions.BookNotAvailableException;
+import com.kunzel.library_api.exceptions.LoanAlreadyReturnedException;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -104,6 +107,15 @@ public class Loan {
 
   public void setBook(Book book) {
     this.book = book;
+  }
+
+  public void markAsReturned() {
+    if (this.returnDate != null) {
+      throw new LoanAlreadyReturnedException(this.getId());
+    }
+
+    this.returnDate = LocalDate.now();
+    this.book.markAsReturned();
   }
 
 }
