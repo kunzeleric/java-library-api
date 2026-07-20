@@ -22,4 +22,9 @@ public class GlobalExceptionHandler {
   public ResponseEntity<String> handleAuthorWithBooksRemoval(AuthorWithBooksException ex) {
     return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
   }
+
+  @ExceptionHandler(DuplicatedIsbnException.class)
+  public ResponseEntity<String> handleDuplicatedIsbn(DuplicatedIsbnException ex) {
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+  }
 }

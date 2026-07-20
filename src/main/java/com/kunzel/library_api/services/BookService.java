@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.kunzel.library_api.exceptions.BookNotAvailableException;
+import com.kunzel.library_api.exceptions.DuplicatedIsbnException;
 import com.kunzel.library_api.exceptions.NotFoundException;
 import com.kunzel.library_api.model.Author;
 import com.kunzel.library_api.model.Book;
@@ -31,6 +32,10 @@ public class BookService {
 
   public Book createBook(String title, String isbn, int publishedYear, String genre, Long authorId) {
     Author author = authorRepository.findById(authorId).orElseThrow(() -> new NotFoundException(authorId));
+
+    if (isIsbnDuplicated(isbn)) {
+      throw new DuplicatedIsbnException(isbn);
+    }
 
     Book book = new Book(title, isbn, publishedYear, genre, author);
     return bookRepository.save(book);
@@ -67,5 +72,17 @@ public class BookService {
     }
 
     bookRepository.delete(book);
+  }
+
+  public Boolean isIsbnDuplicated(String isbn) {
+    List<Book> books = bookRepository.findAll();
+
+    for (Book book : books) {
+      if (isbn.equals(book.getIsbn())) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
