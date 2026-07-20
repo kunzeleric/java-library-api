@@ -32,4 +32,9 @@ public class GlobalExceptionHandler {
   public ResponseEntity<String> handleLoanAlreadyReturned(LoanAlreadyReturnedException ex) {
     return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
   }
+
+  @ExceptionHandler(DuplicatedAuthorException.class)
+  public ResponseEntity<String> handleDuplicatedAuthor(DuplicatedAuthorException ex) {
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+  }
 }

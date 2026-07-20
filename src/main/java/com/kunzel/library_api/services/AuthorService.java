@@ -6,9 +6,12 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.kunzel.library_api.exceptions.AuthorWithBooksException;
+import com.kunzel.library_api.exceptions.DuplicatedAuthorException;
 import com.kunzel.library_api.exceptions.NotFoundException;
 import com.kunzel.library_api.model.Author;
 import com.kunzel.library_api.repositories.AuthorRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class AuthorService {
@@ -28,25 +31,29 @@ public class AuthorService {
   }
 
   public List<Author> getAuthorsByName(String name) {
-    // When getting a list from the database, stream method allows processing the
-    // list (as Stream interface - map processes it, then we convert to a List
-    // again)
     return authorRepository.searchByName(name);
   }
 
+  @Transactional
   public Author createAuthor(String name, String nationality, LocalDate birthDate) {
+    ensureNameIsAvailable(name, null);
     Author author = new Author(name, nationality, birthDate);
     authorRepository.save(author);
     return author;
   }
 
+  @Transactional
   public Author updateAuthor(Long id, String name, String nationality, LocalDate birthDate) {
     Author author = getAuthorById(id);
 
-    if (name != null)
+    if (name != null) {
+      ensureNameIsAvailable(name, id);
       author.setName(name);
+    }
+
     if (nationality != null)
       author.setNationality(nationality);
+
     if (birthDate != null)
       author.setBirthDate(birthDate);
 
@@ -61,5 +68,12 @@ public class AuthorService {
     }
 
     authorRepository.delete(author);
+  }
+
+  private void ensureNameIsAvailable(String authorName, Long currentAuthorId) {
+    authorRepository.searchAuthorByName(authorName).filter(existing -> !existing.getId().equals(currentAuthorId))
+        .ifPresent(existing -> {
+          throw new DuplicatedAuthorException(existing.getId(), authorName);
+        });
   }
 }
