@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.kunzel.library_api.exceptions.BookNotAvailableException;
 import com.kunzel.library_api.exceptions.NotFoundException;
 import com.kunzel.library_api.model.Author;
 import com.kunzel.library_api.model.Book;
@@ -60,6 +61,11 @@ public class BookService {
 
   public void removeBook(Long bookId) {
     Book book = getBookById(bookId);
+
+    if (!book.isAvailable()) {
+      throw new BookNotAvailableException(bookId);
+    }
+
     bookRepository.delete(book);
   }
 }
