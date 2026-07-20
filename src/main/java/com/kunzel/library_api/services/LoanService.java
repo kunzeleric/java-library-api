@@ -28,8 +28,12 @@ public class LoanService {
     return loanRepository.save(new Loan(borrowerName, borrowerEmail, book));
   }
 
-  public Page<Loan> getAllLoans(Pageable pageable) {
-    return loanRepository.findAll(pageable);
+  public Page<Loan> getAllLoans(Pageable pageable, Boolean active) {
+    if (active == null)
+      return loanRepository.findAll(pageable);
+    if (active)
+      return loanRepository.findByReturnDateIsNull(pageable);
+    return loanRepository.findByReturnDateIsNotNull(pageable);
   }
 
   @Transactional

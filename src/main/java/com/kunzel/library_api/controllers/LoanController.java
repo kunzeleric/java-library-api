@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kunzel.library_api.dtos.loan.CreateLoanRequest;
@@ -29,8 +30,9 @@ public class LoanController {
   }
 
   @GetMapping
-  public ResponseEntity<Page<LoanResponse>> getAllLoans(Pageable pageable) {
-    Page<LoanResponse> loans = loanService.getAllLoans(pageable).map(LoanResponse::new);
+  public ResponseEntity<Page<LoanResponse>> getAllLoans(Pageable pageable,
+      @RequestParam(required = false) Boolean active) {
+    Page<LoanResponse> loans = loanService.getAllLoans(pageable, active).map(LoanResponse::new);
 
     return ResponseEntity.ok().body(loans);
   }
