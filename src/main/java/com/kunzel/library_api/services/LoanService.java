@@ -1,7 +1,7 @@
 package com.kunzel.library_api.services;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,8 +28,8 @@ public class LoanService {
     return loanRepository.save(new Loan(borrowerName, borrowerEmail, book));
   }
 
-  public List<Loan> getAllLoans() {
-    return loanRepository.findAll();
+  public Page<Loan> getAllLoans(Pageable pageable) {
+    return loanRepository.findAll(pageable);
   }
 
   @Transactional

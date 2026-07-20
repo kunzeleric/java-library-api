@@ -1,8 +1,9 @@
 package com.kunzel.library_api.services;
 
-import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,8 +28,8 @@ public class BookService {
     this.loanRepository = loanRepository;
   }
 
-  public List<Book> getAllBooks() {
-    return bookRepository.findAll();
+  public Page<Book> getAllBooks(Pageable pageable) {
+    return bookRepository.findAll(pageable);
   }
 
   public Book getBookById(Long id) {

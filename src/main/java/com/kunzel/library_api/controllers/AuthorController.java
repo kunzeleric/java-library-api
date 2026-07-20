@@ -2,6 +2,8 @@ package com.kunzel.library_api.controllers;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,8 +35,8 @@ public class AuthorController {
   }
 
   @GetMapping
-  public ResponseEntity<List<AuthorResponse>> fetchAuthors() {
-    List<AuthorResponse> authors = authorService.getAllAuthors().stream().map(AuthorResponse::new).toList();
+  public ResponseEntity<Page<AuthorResponse>> fetchAuthors(Pageable pageable) {
+    Page<AuthorResponse> authors = authorService.getAllAuthors(pageable).map(AuthorResponse::new);
     return ResponseEntity.ok().body(authors);
   }
 

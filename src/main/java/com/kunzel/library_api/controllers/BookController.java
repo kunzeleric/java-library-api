@@ -2,6 +2,8 @@ package com.kunzel.library_api.controllers;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,8 +33,8 @@ public class BookController {
   }
 
   @GetMapping
-  public List<BookResponse> getAllBooks() {
-    return bookService.getAllBooks().stream().map(BookResponse::new).toList();
+  public Page<BookResponse> getAllBooks(Pageable pageable) {
+    return bookService.getAllBooks(pageable).map(BookResponse::new);
   }
 
   @GetMapping("/{id}")

@@ -3,6 +3,8 @@ package com.kunzel.library_api.services;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.kunzel.library_api.exceptions.AuthorWithBooksException;
@@ -22,8 +24,8 @@ public class AuthorService {
     this.authorRepository = authorRepository;
   }
 
-  public List<Author> getAllAuthors() {
-    return authorRepository.findAll();
+  public Page<Author> getAllAuthors(Pageable pageable) {
+    return authorRepository.findAll(pageable);
   }
 
   public Author getAuthorById(Long id) {

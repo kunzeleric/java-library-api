@@ -1,7 +1,7 @@
 package com.kunzel.library_api.controllers;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,8 +29,8 @@ public class LoanController {
   }
 
   @GetMapping
-  public ResponseEntity<List<LoanResponse>> getAllLoans() {
-    List<LoanResponse> loans = loanService.getAllLoans().stream().map(LoanResponse::new).toList();
+  public ResponseEntity<Page<LoanResponse>> getAllLoans(Pageable pageable) {
+    Page<LoanResponse> loans = loanService.getAllLoans(pageable).map(LoanResponse::new);
 
     return ResponseEntity.ok().body(loans);
   }
