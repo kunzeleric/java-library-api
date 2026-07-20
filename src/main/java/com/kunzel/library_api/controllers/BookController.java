@@ -33,8 +33,8 @@ public class BookController {
   }
 
   @GetMapping
-  public Page<BookResponse> getAllBooks(Pageable pageable) {
-    return bookService.getAllBooks(pageable).map(BookResponse::new);
+  public ResponseEntity<Page<BookResponse>> getAllBooks(Pageable pageable) {
+    return ResponseEntity.ok().body(bookService.getAllBooks(pageable).map(BookResponse::new));
   }
 
   @GetMapping("/{id}")
