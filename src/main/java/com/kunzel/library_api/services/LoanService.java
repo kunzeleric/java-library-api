@@ -1,12 +1,10 @@
 package com.kunzel.library_api.services;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.kunzel.library_api.exceptions.BookNotAvailableException;
 import com.kunzel.library_api.exceptions.NotFoundException;
 import com.kunzel.library_api.model.Book;
 import com.kunzel.library_api.model.Loan;
