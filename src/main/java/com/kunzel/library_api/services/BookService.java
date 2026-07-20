@@ -3,6 +3,7 @@ package com.kunzel.library_api.services;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kunzel.library_api.exceptions.BookNotAvailableException;
 import com.kunzel.library_api.exceptions.DuplicatedIsbnException;
@@ -11,15 +12,18 @@ import com.kunzel.library_api.model.Author;
 import com.kunzel.library_api.model.Book;
 import com.kunzel.library_api.repositories.AuthorRepository;
 import com.kunzel.library_api.repositories.BookRepository;
+import com.kunzel.library_api.repositories.LoanRepository;
 
 @Service
 public class BookService {
   private final BookRepository bookRepository;
   private final AuthorRepository authorRepository;
+  private final LoanRepository loanRepository;
 
-  public BookService(BookRepository bookRepository, AuthorRepository authorRepository) {
+  public BookService(BookRepository bookRepository, AuthorRepository authorRepository, LoanRepository loanRepository) {
     this.bookRepository = bookRepository;
     this.authorRepository = authorRepository;
+    this.loanRepository = loanRepository;
   }
 
   public List<Book> getAllBooks() {
@@ -42,8 +46,6 @@ public class BookService {
   }
 
   public Book updateBook(Long bookId, String title, String isbn, Integer publishedYear, String genre, Long authorId) {
-    Author author = authorRepository.findById(authorId).orElseThrow(() -> new NotFoundException(authorId));
-
     Book book = getBookById(bookId);
 
     if (title != null)
@@ -58,12 +60,15 @@ public class BookService {
     if (genre != null)
       book.setGenre(genre);
 
-    if (authorId != null)
+    if (authorId != null) {
+      Author author = authorRepository.findById(authorId).orElseThrow(() -> new NotFoundException(authorId));
       book.setAuthor(author);
+    }
 
     return bookRepository.save(book);
   }
 
+  @Transactional
   public void removeBook(Long bookId) {
     Book book = getBookById(bookId);
 
@@ -71,6 +76,7 @@ public class BookService {
       throw new BookNotAvailableException(bookId);
     }
 
+    loanRepository.deleteByBookId(bookId);
     bookRepository.delete(book);
   }
 

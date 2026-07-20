@@ -46,13 +46,6 @@ public record LoanResponse(Long loanId, String borrowerName, LocalDate dueDate, 
       if (returnDate != null) {
         return ChronoUnit.DAYS.between(dueDate, returnDate);
       }
-
-      LocalDate currentDate = LocalDate.now();
-
-      // If Due Date is AFTER current date, then we know its LATE and NOT returned
-      if (dueDate.isAfter(currentDate)) {
-        return ChronoUnit.DAYS.between(dueDate, currentDate);
-      }
     }
 
     // Return 0 days because loan is NOT late

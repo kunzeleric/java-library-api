@@ -12,6 +12,8 @@ import com.kunzel.library_api.model.Loan;
 import com.kunzel.library_api.repositories.BookRepository;
 import com.kunzel.library_api.repositories.LoanRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class LoanService {
   private final LoanRepository loanRepository;
@@ -22,6 +24,7 @@ public class LoanService {
     this.bookRepository = bookRepository;
   }
 
+  @Transactional
   public Loan createLoan(Long bookId, String borrowerName, String borrowerEmail) {
     Book book = bookRepository.findById(bookId).orElseThrow(() -> new NotFoundException(bookId));
 
@@ -41,6 +44,7 @@ public class LoanService {
     return loanRepository.findAll();
   }
 
+  @Transactional
   public Loan returnLoan(Long loanId) {
     Loan foundLoan = loanRepository.findById(loanId).orElseThrow(() -> new NotFoundException(loanId));
     Book loanBook = bookRepository.findById(foundLoan.getBook().getId())
