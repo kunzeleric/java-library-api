@@ -1,9 +1,15 @@
 package com.kunzel.library_api.exceptions;
 
+import java.util.List;
+
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import com.kunzel.library_api.dtos.FieldErrorResponse;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -36,5 +42,16 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(DuplicatedAuthorException.class)
   public ResponseEntity<String> handleDuplicatedAuthor(DuplicatedAuthorException ex) {
     return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+  }
+
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<List<FieldErrorResponse>> handleFieldsValidation(MethodArgumentNotValidException ex) {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(ex.getBindingResult().getFieldErrors().stream().map(FieldErrorResponse::new).toList());
+  }
+
+  @ExceptionHandler(DataIntegrityViolationException.class)
+  public ResponseEntity<String> handleDataIntegrity() {
+    return ResponseEntity.status(HttpStatus.CONFLICT).body("Operação viola uma restrição de integridade dos dados.");
   }
 }
