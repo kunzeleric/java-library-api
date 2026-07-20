@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(BookNotAvailableException.class)
   public ResponseEntity<String> handleBookNotAvailable(BookNotAvailableException ex) {
     return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
-  };
+  }
 
   @ExceptionHandler(AuthorWithBooksException.class)
   public ResponseEntity<String> handleAuthorWithBooksRemoval(AuthorWithBooksException ex) {

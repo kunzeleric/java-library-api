@@ -37,7 +37,7 @@ public class Loan {
 
   @ManyToOne
   @JoinColumn(name = "book", nullable = false)
-  Book book;
+  private Book book;
 
   protected Loan() {
   }
