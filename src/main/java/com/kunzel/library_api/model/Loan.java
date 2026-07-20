@@ -23,7 +23,7 @@ public class Loan {
   @Column(nullable = false)
   private String borrowerName;
 
-  @Column(nullable = true)
+  @Column(nullable = false)
   private String borrowerEmail;
 
   @Column(nullable = false)
