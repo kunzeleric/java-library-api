@@ -1,0 +1,47 @@
+package com.kunzel.library_api.controllers;
+
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.kunzel.library_api.dtos.loan.CreateLoanRequest;
+import com.kunzel.library_api.dtos.loan.LoanResponse;
+import com.kunzel.library_api.model.Loan;
+import com.kunzel.library_api.services.LoanService;
+
+@RestController
+@RequestMapping("/loans")
+public class LoanController {
+  private final LoanService loanService;
+
+  public LoanController(LoanService loanService) {
+    this.loanService = loanService;
+  }
+
+  @GetMapping
+  public ResponseEntity<List<LoanResponse>> getAllLoans() {
+    List<LoanResponse> loans = loanService.getAllLoans().stream().map(LoanResponse::new).toList();
+
+    return ResponseEntity.ok().body(loans);
+  }
+
+  @PostMapping
+  public ResponseEntity<LoanResponse> createLoan(@RequestBody CreateLoanRequest request) {
+    Loan created = loanService.createLoan(request.bookId(), request.borrowerName(), request.borrowerEmail());
+    return ResponseEntity.status(HttpStatus.CREATED).body(new LoanResponse(created));
+  }
+
+  @PatchMapping("/{id}/return")
+  public ResponseEntity<LoanResponse> returnLoan(@PathVariable("id") long id) {
+    Loan loan = loanService.returnLoan(id);
+    return ResponseEntity.ok().body(new LoanResponse(loan));
+  }
+}
