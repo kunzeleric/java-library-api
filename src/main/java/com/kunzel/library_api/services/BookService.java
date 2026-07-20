@@ -28,8 +28,8 @@ public class BookService {
     this.loanRepository = loanRepository;
   }
 
-  public Page<Book> getAllBooks(Pageable pageable) {
-    return bookRepository.findAll(pageable);
+  public Page<Book> getAllBooks(Pageable pageable, String genre, Long authorId, Boolean available) {
+    return bookRepository.search(genre, authorId, available, pageable);
   }
 
   public Book getBookById(Long id) {

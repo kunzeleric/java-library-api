@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kunzel.library_api.dtos.book.BookResponse;
@@ -31,8 +32,10 @@ public class BookController {
   }
 
   @GetMapping
-  public ResponseEntity<Page<BookResponse>> getAllBooks(Pageable pageable) {
-    return ResponseEntity.ok().body(bookService.getAllBooks(pageable).map(BookResponse::new));
+  public ResponseEntity<Page<BookResponse>> getAllBooks(Pageable pageable, @RequestParam(required = false) String genre,
+      @RequestParam(required = false) Long authorId, @RequestParam(required = false) Boolean available) {
+    return ResponseEntity.ok()
+        .body(bookService.getAllBooks(pageable, genre, authorId, available).map(BookResponse::new));
   }
 
   @GetMapping("/{id}")
