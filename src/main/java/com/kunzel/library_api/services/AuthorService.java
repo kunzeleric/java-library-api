@@ -6,14 +6,13 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kunzel.library_api.exceptions.AuthorWithBooksException;
 import com.kunzel.library_api.exceptions.DuplicatedAuthorException;
 import com.kunzel.library_api.exceptions.NotFoundException;
 import com.kunzel.library_api.model.Author;
 import com.kunzel.library_api.repositories.AuthorRepository;
-
-import jakarta.transaction.Transactional;
 
 @Service
 public class AuthorService {

@@ -92,10 +92,6 @@ public class Loan {
     return returnDate;
   }
 
-  public void setReturnDate(LocalDate returnDate) {
-    this.returnDate = returnDate;
-  }
-
   public Book getBook() {
     return book;
   }
