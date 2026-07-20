@@ -1,6 +1,7 @@
 package com.kunzel.library_api.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,9 +37,11 @@ public class BookService {
 
   public Book createBook(String title, String isbn, int publishedYear, String genre, Long authorId) {
     Author author = authorRepository.findById(authorId).orElseThrow(() -> new NotFoundException(authorId));
+    Optional<Book> existingBook = bookRepository.findByIsbn(isbn);
 
-    if (isIsbnDuplicated(isbn)) {
+    if (existingBook.isPresent()) {
       throw new DuplicatedIsbnException(isbn);
+
     }
 
     Book book = new Book(title, isbn, publishedYear, genre, author);
@@ -52,7 +55,8 @@ public class BookService {
       book.setTitle(title);
 
     if (isbn != null) {
-      if (isIsbnDuplicated(isbn)) {
+      Optional<Book> existingBook = bookRepository.findByIsbn(isbn);
+      if (existingBook.isPresent() && !existingBook.get().getId().equals(bookId)) {
         throw new DuplicatedIsbnException(isbn);
       }
       book.setIsbn(isbn);
@@ -82,17 +86,5 @@ public class BookService {
 
     loanRepository.deleteByBookId(bookId);
     bookRepository.delete(book);
-  }
-
-  public Boolean isIsbnDuplicated(String isbn) {
-    List<Book> books = bookRepository.findAll();
-
-    for (Book book : books) {
-      if (isbn.equals(book.getIsbn())) {
-        return true;
-      }
-    }
-
-    return false;
   }
 }
